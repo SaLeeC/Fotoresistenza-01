@@ -1,4 +1,12 @@
-// Programma per la lettura di una fotoresistena tramite un ingresso analogico
+// Programma per la definizione della condizione di Giorno/Notte attraverso la lettura
+// di una fotoresistena collegata ad un ingresso analogico
+
+//La condizione iniziale è che sia Notte.
+
+// Il programma comprende il modulo per la comunicazione seriale dei valori letti.
+// Il modulo si attiva e disattiva con il flag Monitor che ammette i valori true e false
+
+#define Monitor false
 
 //Ricordate che nella definizione delle costanti non va messo il segno uguale fra 
 //il nome simbolico e il valore e non va messo il punto e virgola a fine riga
@@ -24,9 +32,12 @@ byte GiornoNotte = 0;//0 = NOTTE - 1 = GIORNO
 void setup()
 {
   pinMode(LEDNotte, OUTPUT);
+  digitalWrite(LEDNotte, HIGH);
   pinMode(LEDGiorno, OUTPUT);
-  
-  Serial.begin(VelocitaPortaSeriale);
+  if (Monitor == true)
+  {
+    Serial.begin(VelocitaPortaSeriale);
+  }
 //Per semplificare il programma ho scelto di omettere il controllo della seriale
 }
 
@@ -45,9 +56,12 @@ void loop()
     digitalWrite(LEDNotte, LOW);
     digitalWrite(LEDGiorno, HIGH);
   }
-
-  Serial.print("Lettura in COUNT ");//mando sulla seriale l'inizio della riga 
-  Serial.println(ADCCount);//mando sulla seriale il valore letto e vado a capo
+  
+  if(Monitor == true)
+  {
+    Serial.print("Lettura in COUNT ");//mando sulla seriale l'inizio della riga 
+    Serial.println(ADCCount);//mando sulla seriale il valore letto e vado a capo
+  }
 
   delay(ADCDelay);//aspetto prima di ripetere il ciclo
 }
